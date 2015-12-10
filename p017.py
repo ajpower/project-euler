@@ -112,8 +112,6 @@ def int2word(num):
         else:
             return left_side + " " + int2word(remainder)
 
-    return str(num)
-
 def main():
     """Print the number of letters, no including spaces in hyphens, of all
     numbers from one to 'MAX_NUM' written out.
