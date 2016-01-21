@@ -4,7 +4,7 @@
 It can be easily seen that the only fractions two digit numerators and
 denominators that allow non-trivial digit cancellation have the form
 
-    10n + i   x
+    10n + i   n
     _______ = _ 
     10i + d   d
 
