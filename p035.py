@@ -2,10 +2,10 @@
 """Project Euler, Problem 35
 
 Any potential circular prime (with more than a single digit) can be composed
-only of the digits 1, 3, 5, 7, and 9; otherwise, at least one of the rotations
-of the number would produce an even integer.
+only of the digits 1, 3, 7, and 9; otherwise, at least one of the rotations
+of the number would produce an even integer or a multiple of 5.
 
-Begin by generating all two digit numbers formed from the above 5 digits. Find
+Begin by generating all two digit numbers formed from the above 4 digits. Find
 the rotations of each one and check their primality to verify if the number is
 a circular prime. Then move to three digits, then four, etc. until all 6 digit
 numbers have been checked.
@@ -49,7 +49,7 @@ def main():
     circular_primes = [2, 3, 5, 7] # start by adding circular primes with one
                                    # digit.
 
-    allowed_digits = ['1', '3', '5', '7', '9']
+    allowed_digits = ['1', '3', '7', '9']
     for num_digits in range(2, 7): # numbers below one million can have at most
                                    # 6 digits.
         for num_tuple in product(allowed_digits, repeat=num_digits):
