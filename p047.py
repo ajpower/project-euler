@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 """Project Euler, Problem 47
+
+Brute force using a standard algorithm for finding the prime factors of a
+number.
 """
 def prime_factors(n):
     """Return a set of unique prime factors of 'n'.
