@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Project Euler, Problem 52
 
-Brute force solution based on the Counter collection. Micro-optimizations are possible, such as not iterating over all numbers for a given number of digits, but the current solution is fast enough.
+Brute force solution based on the Counter collection. Micro-optimizations are
+possible, such as not iterating over all numbers for a given number of digits,
+but the current solution is fast enough.
 """
 from collections import Counter
 
