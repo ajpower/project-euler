@@ -24,7 +24,7 @@ def digits(x):
 def main():
     x = 10
     while True:
-        if all(digits(n*x) == digits(x) for n in range(2, 7)):
+        if all(digits(n * x) == digits(x) for n in range(2, 7)):
             print(x)
             return
 
