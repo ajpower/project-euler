@@ -1,34 +1,22 @@
 #!/usr/bin/env python3
-"""Project Euler, Problem 2
+"""Project Euler, Problem 2."""
+import math
 
-The Fibonacci sequence was generated and the sum of even elements below four
-million was computed.
-"""
 LARGEST_FIB = 4000000
 
 
-def fib_gen():
-    """Generate elements of the Fibonacci sequence.
-    """
+def fib_gen(max_fib=math.inf):
+    """Generate elements of the Fibonacci sequence."""
     a, b = 0, 1
-    while True:
+    while a <= max_fib:
         yield a
         a, b = b, a + b
 
-def main():
-    """Print the sum of even Fibonacci numbers below LARGEST_FIB.
-    """
-    g = fib_gen()
 
+if __name__ == '__main__':
     sum_even_fibs = 0
-    fib = next(g)
-    while fib < LARGEST_FIB:
-        if fib % 2 == 0:
-            sum_even_fibs += fib
-        fib = next(g)
+    for n in fib_gen(LARGEST_FIB):
+        if n % 2 == 0:
+            sum_even_fibs += n
 
     print(sum_even_fibs)
-
-
-if __name__ == "__main__":
-    main()
