@@ -15,7 +15,7 @@ UPPER_BOUND = 1000
 
 
 def sum_integers(n):
-    """Return the sum of all integers less than or equal to n."""
+    """Return the sum of all positive integers less than or equal to n."""
     return n * (n + 1) // 2
 
 
