@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
-"""Project Euler, Problem 8
+"""Project Euler, Problem 8."""
+from functools import reduce
 
-Iterates throught the 1000-digit number, calculating the product of N digit
-sequences as it goes and storing the result. The result from the previous N
-digit product can be used to calculate the current N digit product more
-efficiently. If a zero digit is discovered, the iteration skips ahead to the
-subsequent digit and resumes its calcuations.
-"""
 N = 13
 NUMBER_BLOCK = """
 73167176531330624919225119674426574742355349194934
@@ -31,38 +26,12 @@ NUMBER_BLOCK = """
 71636269561882670428252483600823257530420752963450
 """.replace('\n', '')
 
+if __name__ == '__main__':
+    max_product = 0
+    for substring in (NUMBER_BLOCK[i:i + N] for i in
+                      range(len(NUMBER_BLOCK) - N + 1)):
+        product = reduce(lambda x, y: int(x) * int(y), substring)
+        if product > max_product:
+            max_product = product
 
-def largest_product(n):
-    """Return the largest product of n consecutive digits in NUMBER_BLOCK.
-    """
-    current_max = 0
-    last_product = 0
-    i = 0
-    while i < len(NUMBER_BLOCK) - (n-1):
-        if last_product == 0:
-            last_product = 1
-            for j in range(i, i+n):
-                last_product *= int(NUMBER_BLOCK[j])
-            i += 1
-
-        elif NUMBER_BLOCK[i+n-1] == 0:
-            last_product = 0
-            i += n
-
-        else:
-            last_product = last_product * int(NUMBER_BLOCK[i+n-1]) // int(NUMBER_BLOCK[i-1])
-            i += 1
-
-        if last_product > current_max:
-            current_max = last_product
-
-    return current_max
-
-def main():
-    """Print the largest product of N consecutive digits in NUMBER_BLOCK. 
-    """
-    print(largest_product(N))
-
-
-if __name__ == "__main__":
-    main()
+    print(max_product)

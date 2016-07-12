@@ -1,38 +1,28 @@
 #!/usr/bin/env python3
-"""Project Euler, Problem 10
+"""Project Euler, Problem 10.
 
 Uses a sieve of Eratosthenes to find all prime numbers below N, which can then
 be easily summed.
 """
-from math import sqrt
-
 N = 2000000
 
 
-def sieve(n):
-    """Return a list of all primes less than or equal to n.
-    """
-    _sieve = [False] + [False] + (n-1)*[True]
+def primes(limit):
+    """Return a list of all primes below limit."""
+    sieve = limit * [True]
+    sieve[0] = sieve[1] = False
 
-    divisor = 2
-    while divisor <= sqrt(n):
-        if _sieve[divisor]:
-            for k in range(divisor**2, n+1):
-                if k % divisor == 0:
-                    _sieve[k] = False
+    for (i, is_prime) in enumerate(sieve):
+        if i * i > limit:
+            break
 
-        divisor += 1
+        if is_prime:
+            for j in range(i * i, limit, i):
+                sieve[j] = False
 
-    primes = [i for i in range(len(_sieve)) if _sieve[i]]
-    return primes
-
-def main():
-    """Find sum of all prime numbers below N.
-    """
-    primes = sieve(N)
-    sum_primes = sum(primes)
-    print(sum_primes)
+    return [p for (p, is_prime) in enumerate(sieve) if is_prime]
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    answer = sum(primes(N))
+    print(answer)

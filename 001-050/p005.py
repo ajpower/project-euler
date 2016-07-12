@@ -1,37 +1,42 @@
 #!/usr/bin/env python3
-"""Project Euler, Problem 5
+"""Project Euler, Problem 5.
 
-Finds the prime factors for every number from 1 to 20, collects the prime
-factors that have the largest power, and multiplies those together.
+Find the prime factors for every number from 1 to N, collect the prime factors
+that have the largest power, and multiply those together.
 """
-from p003 import prime_factors
+from collections import Counter
+from functools import reduce
+from operator import mul
 
 N = 20
 
 
-def main():
-    """Print the smallest positive number evenly divisible by all numbers from
-    1 to N.
-    """
-    highest_power_primes = []
+def prime_factor(n):
+    """Return the prime factors of n."""
+    factors = []
+    divisor = 2
 
-    for n in range(2, N+1):
-        factors = prime_factors(n)
-        unique_factors = set(factors)
+    while n >= divisor * divisor:
+        while n % divisor == 0:
+            factors.append(divisor)
+            n //= divisor
+        divisor += 1
 
-        for prime in unique_factors:
-            a = factors.count(prime)
-            b = highest_power_primes.count(prime)
+    if n > 1:
+        factors.append(n)
 
-            if a > b:
-                highest_power_primes += [prime]*(a-b)
+    return factors
 
-    answer = 1
-    for prime in highest_power_primes:
-        answer *= prime
+
+if __name__ == '__main__':
+    prime_count = Counter()
+
+    for n in range(N):
+        factors = prime_factor(n)
+        for p in factors:
+            prime_power = factors.count(p)
+            prime_count[p] = max(prime_count[p], prime_power)
+
+    answer = reduce(mul, (p ** prime_count[p] for p in prime_count))
 
     print(answer)
-
-
-if __name__ == "__main__":
-    main()
