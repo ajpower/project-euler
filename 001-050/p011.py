@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Project Euler, Problem 11
+"""Project Euler, Problem 11."""
+from functools import reduce
+from operator import mul
 
-Brute-force solution.
-"""
 SEQUENCE_LENGTH = 4
 NUMBERS = """
 08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08
@@ -28,110 +28,62 @@ NUMBERS = """
 """.strip()
 
 
-def convert_to_grid():
-    """Convert `NUMBERS` to a 2D array of NUMBERS, assuming that `NUMBERS` is
-    a string of NUMBERS where each row is seperated by a newline and eash column
-    is seperated by a space.
-    """
-    grid = NUMBERS.split('\n')
-    for i in range(len(grid)):
-        temp = grid[i].split(' ') #list of strings, need ints
-        grid[i] = [int(num) for num in temp]
-
-    return grid
-
-def max_product(number_sequence):
-    """Return the maximum product of adjacent numbers of length
-    `SEQUENCE_LENGTH` in `number_sequence`, assuming that `number_sequence` is a
-    list of numbers.
-    """
-    #Rather than calculate the product of every sequence of length
-    #`SEQUENCE_LENGTH` seperately, this algorithm records the result of the
-    #previous product and uses it to speed up the calculation. Special
-    #provisions have to be made if a sequence will contain a 0. Specifically,
-    #`previous_product` is set to zero and the iteration skips ahead to the
-    #number immediately after the offending 0.
-    _max_product = 0
-    previous_product = 0
-    i = 0
-    while i < len(number_sequence) - (SEQUENCE_LENGTH-1):
-        if previous_product == 0:
-            previous_product = 1
-            for j in range(SEQUENCE_LENGTH):
-                previous_product *= number_sequence[i+j]
-
-            i += 1
-
-        elif number_sequence[i+SEQUENCE_LENGTH-1] == 0:
-            previous_product = 0
-            i += SEQUENCE_LENGTH
-
-        else:
-            final_digit = number_sequence[i + SEQUENCE_LENGTH - 1]
-            previous_final_digit = number_sequence[i - 1]
-            previous_product = (previous_product * final_digit) // previous_final_digit
-
-            i += 1
-
-        if previous_product > _max_product:
-            _max_product = previous_product
-
-    return _max_product
-
-def max_horizontal_product(grid):
-    """Return the maximum product of horizontally adjacent NUMBERS in `grid` of
-    length `SEQUENCE_LENGTH`.
-    """
-    return max(max_product(row) for row in grid)
-
-def max_vertical_product(grid):
-    """Return the maximum product of veritcally adjacent NUMBERS in `grid` of
-    length `sequence length`.
-    """
-    n_rows = len(grid)
-    n_cols = len(grid[0])
-
-    vertical_products = []
-    for j in range(n_cols):
-        column = [grid[i][j] for i in range(n_rows)]
-        product = max_product(column)
-        vertical_products.append(product)
-
-    return max(vertical_products)
-
-def max_diagonal_product(grid):
-    """Return the maximum product of diagonally adjacent NUMBERS in `grid` of
-    length `sequence length`.
-    """
-    n_rows = len(grid)
-
-    downward_diagonal_products = []
-    for i in range(n_rows - (SEQUENCE_LENGTH-1)):
-        downward_diagonal = [grid[i+j][j] for j in range(n_rows-i)]
-        product = max_product(downward_diagonal)
-        downward_diagonal_products.append(product)
-
-    upward_diagonal_products = []
-    for i in range(4, n_rows):
-        upward_diagonal = [grid[i-j][j] for j in range(i+1)]
-        product = max_product(upward_diagonal)
-        upward_diagonal_products.append(product)
-
-    diagonal_products = downward_diagonal_products + upward_diagonal_products
-    return max(diagonal_products)
-
-def main():
-    """Find the largest product of consecutive horizontal, vertical, and
-    diagonal digits in NUMBERS of length SEQUENCE_LENGTH, then print the
-    largest of the three.
-    """
-    grid = convert_to_grid()
-    largest_product = max(max_horizontal_product(grid),
-                          max_vertical_product(grid),
-                          max_diagonal_product(grid))
-
-    print(largest_product)
+def convert_to_matrix(numbers):
+    """Convert a string of numbers into a matrix. The columns of the matrix
+    are separated by spaces and the rows separated by newlines."""
+    return [[int(num) for num in row.split(' ')] for row in numbers.split('\n')]
 
 
-if __name__ == "__main__":
-    main()
+def max_horizontal(num_matrix, n):
+    """Return the greatest product of n horizontal numbers in the number
+    matrix."""
+    max_product = 0
+    for row in num_matrix:
+        for adjacent_nums in (row[i:i + n] for i in range(len(row) - n + 1)):
+            product = reduce(mul, adjacent_nums)
+            max_product = max(max_product, product)
+
+    return max_product
+
+
+def max_vertical(num_matrix, n):
+    """Return the greatest product of n vertical numbers in the number
+    matrix."""
+    max_product = 0
+    for col in zip(*number_matrix):
+        for adjacent_nums in (col[i:i + n] for i in range(len(col) - n + 1)):
+            product = reduce(mul, adjacent_nums)
+            max_product = max(max_product, product)
+
+    return max_product
+
+
+def max_diagonal(num_matrix, n):
+    """Return the greatest product of n diagonal numbers in the number
+    matrix."""
+    max_product = 0
+
+    # Downward diagonals.
+    for i in range(len(num_matrix) - n + 1):
+        d_diagonal = [num_matrix[i + j][j] for j in range(len(num_matrix) - i)]
+        for adjacent_nums in (d_diagonal[i:i + n] for i in
+                              range(len(d_diagonal) - n + 1)):
+            product = reduce(mul, adjacent_nums)
+            max_product = max(max_product, product)
+
+    # Upward diagonals.
+    for i in range(n, len(num_matrix)):
+        u_diagonal = [num_matrix[i - j][j] for j in range(i + 1)]
+        for adjacent_nums in (u_diagonal[i:i + n] for i in
+                              range(len(u_diagonal) - n + 1)):
+            product = reduce(mul, adjacent_nums)
+            max_product = max(max_product, product)
+
+    return max_product
+
+
+if __name__ == '__main__':
+    number_matrix = convert_to_matrix(NUMBERS)
+    products = [fun(number_matrix, n=SEQUENCE_LENGTH) for fun in
+                (max_horizontal, max_vertical, max_diagonal)]
+    print(max(products))

@@ -12,13 +12,13 @@ def primes(limit):
     sieve = limit * [True]
     sieve[0] = sieve[1] = False
 
-    for (i, is_prime) in enumerate(sieve):
-        if i * i > limit:
-            break
-
-        if is_prime:
+    i = 0
+    while i * i <= limit:
+        if sieve[i]:
             for j in range(i * i, limit, i):
                 sieve[j] = False
+
+        i += 1
 
     return [p for (p, is_prime) in enumerate(sieve) if is_prime]
 

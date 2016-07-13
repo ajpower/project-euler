@@ -106,19 +106,11 @@ NUMBER_BLOCK = """
 53503534226472524250874054075591789781264330331690
 """.strip()
 
-NUMBERS = NUMBER_BLOCK.strip().split('\n')
+if __name__ == '__main__':
+    numbers = NUMBER_BLOCK.split('\n')
 
-
-def main():
-    """Print the first ten digits of the sum of all numbers in `NUMBER_BLOCK`.
-    """
     sum_first_11 = 0
-    for number in NUMBERS:
-        sum_first_11 += int(number[:11])
+    for num in numbers:
+        sum_first_11 += int(num[:11])
 
-    first_10_digits = str(sum_first_11)[:10]
-    print(first_10_digits)
-
-
-if __name__ == "__main__":
-    main()
+    print(str(sum_first_11)[:10])
