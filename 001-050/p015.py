@@ -1,29 +1,29 @@
-#!/usr/bin/env python3.4
-"""Project Euler, Problem 15
+#!/usr/bin/env python3
+"""Project Euler, Problem 15.
 
 It is necessary and sufficient to make N right turns and N downward turns to
 reach the bottom right of the lattice. Hence there are 2N choose N paths from
 the top left to the bottom right.
 """
+from functools import reduce
+from operator import mul
+
 N = 20
 
 
 def binomial(n, k):
-    """Return n choose k.
-    """
-    product = 1
-    for i in range(1, k+1):
-        product *= (n + 1 - i) / i
+    """Return n choose k."""
+    k = min(k, n - k)
 
-    return int(product)
+    if k < 0:
+        return 0
+    if k == 0:
+        return 1
 
-def main():
-    """Print the number of routes from the top left of a NxN lattice to the
-    bottom right moving only down and right.
-    """
-    num_routes = binomial(2*N, N)
-    print(num_routes)
+    numerator = reduce(mul, (n + 1 - i for i in range(1, k + 1)))
+    denominator = reduce(mul, range(1, k + 1))
+    return numerator // denominator
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    print(binomial(2 * N, N))

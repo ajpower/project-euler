@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Project Euler, Problem 18
+"""Project Euler, Problem 18.
 
 For each element in the second to last row, find the adjacent number in the
-last row that has the greatest value and add it to the element. Then eleminate
+last row that has the greatest value and add it to the element. Then eliminate
 the last row. Repeat the process until there is only one row with one element
 left. The value of this final remaining element will be the largest total sum
 of elements for all possible paths from the top of the triangle to its bottom.
@@ -27,35 +27,27 @@ TRIANGLE_STR = """
 
 
 def str2array(triangle_str):
-    """Return an array of arrays of integers representing the triangle.
-    """
+    """Return an array of arrays of integers representing the triangle."""
     triangle_array = []
     for row in triangle_str.strip().split('\n'):
         triangle_array.append([int(num) for num in row.split(' ')])
     return triangle_array
 
+
 def max_total(triangle):
     """Return the maximum sum of integers for all possible paths from the top of
-    'triangle' to its bottom. 'triangle' is an array or arrays of integers.
+    triangle to its bottom.
     """
     if len(triangle) == 1:
         return triangle[0][0]
 
-    last_row = triangle[-1]
     for i in range(len(triangle[-2])):
-        triangle[-2][i] += max(last_row[i], last_row[i+1])
+        triangle[-2][i] += max(triangle[-1][i], triangle[-1][i + 1])
 
-    else:
-        triangle = triangle[:-1]
-        return max_total(triangle)
+    triangle.pop()
+    return max_total(triangle)
 
-def main():
-    """Print the maximum sum of integers for all possible paths from the top of
-    'TRIANGLE_STR' to its bottom.
-    """
+
+if __name__ == '__main__':
     triangle = str2array(TRIANGLE_STR)
     print(max_total(triangle))
-
-
-if __name__ == "__main__":
-    main()
