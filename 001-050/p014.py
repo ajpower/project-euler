@@ -18,10 +18,5 @@ def chain_length(n):
 
 
 if __name__ == '__main__':
-    max_length = 0
-    starting_number = 0
-    for n, length in enumerate(map(chain_length, range(1, N))):
-        if length > max_length:
-            starting_number, max_length = n, length
-
+    max_length, starting_number = max((chain_length(n), n) for n in range(1, N))
     print(starting_number)
