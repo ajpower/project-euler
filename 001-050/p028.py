@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Project Euler, Problem 28
+"""Project Euler, Problem 28.
 
 The sum of the four diagonal elements in the outer ring of an N by N number
 spiral is equal to
 
-    4N^2 - 6N + 1
+    4N^2 - 6N + 1.
 
 This can be seen by noting that the upper left diagonal element is equal to
 N^2, and that each subsequent diagonal element moving in a counterclockwise
@@ -23,14 +23,8 @@ where M = (N-1)/2.
 """
 N = 1001
 
-
-def main():
-    """Print the sum of diagonal elements of a N by N number sprial.
-    """
+if __name__ == '__main__':
     M = (N - 1) // 2
-    diagonal_sum = 8*(M*(M+1)*(2*M+1))//3 + 2*(M+1)*M + 4*M + 1
+    diagonal_sum = (
+        8 * (M * (M + 1) * (2 * M + 1)) // 3 + 2 * (M + 1) * M + 4 * M + 1)
     print(diagonal_sum)
-
-
-if __name__ == "__main__":
-    main()
