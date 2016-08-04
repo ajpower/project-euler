@@ -26,5 +26,5 @@ def cycle_length(d):
 
 
 if __name__ == '__main__':
-    max_cycle, d_max_cycle = max((cycle_length(d), d) for d in range(1, D_MAX))
+    d_max_cycle = max(range(1, D_MAX), key=cycle_length)
     print(d_max_cycle)
