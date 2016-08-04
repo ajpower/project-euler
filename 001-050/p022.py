@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""Project Euler, Problem 22
-
-Brute force solution.
-"""
+"""Project Euler, Problem 22."""
 FILE_NAME = "p022_names.txt"
 
 
@@ -15,6 +12,7 @@ def alphabetical_value(name):
         value += ord(char) - 64
 
     return value
+
 
 def total_score():
     """Return the sum of scores for all names in 'FILE_NAME'.
@@ -36,6 +34,7 @@ def total_score():
         total_score += score
 
     return total_score
+
 
 def main():
     """Print the sum of scores for all names in 'FILE_NAME'.

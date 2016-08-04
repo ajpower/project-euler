@@ -1,39 +1,25 @@
 #!/usr/bin/env python3
-"""Project Euler
-"""
+"""Project Euler, Problem 21."""
 N = 10000
 
 
 def d(n):
-    """Return the sum of proper divisors of n.
-    """
-    # 1 is always a divisor so can be added immediately; including in the loop
-    # adds complications because n cannot be included in the sum of divisors.
-    divisor = 2 
-    sum_divisors = 1
-    while divisor**2 < n:
-        if n % divisor == 0:
-            sum_divisors += divisor + n // divisor
+    """Return the sum of the proper divisors of n."""
+    sum_divisors = 1  # Include 1 from the start.
+    div = 2
+    while div * div < n:
+        if n % div == 0:
+            sum_divisors += div
+            sum_divisors += n // div
+        div += 1
 
-        divisor += 1
-
-    # special case if n is a perfect square
-    if divisor**2 == n:
-        sum_divisors += divisor
+    # Explicit check if n is a perfect square.
+    if div * div == n:
+        sum_divisors += div
 
     return sum_divisors
 
-def main():
-    """Print the sum of all amicable numbers under N.
-    """
-    sum_amicable_numbers = 0
-    for a in range(1,N+1):
-        b = d(a)
-        if d(b) == a and a != b:
-            sum_amicable_numbers += a 
 
-    print(sum_amicable_numbers)
-
-
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    amicable_nums = [n for n in range(1, N) if n == d(d(n)) and n != d(n)]
+    print(sum(amicable_nums))
