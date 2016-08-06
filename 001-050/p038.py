@@ -1,72 +1,35 @@
 #!/usr/bin/env python3
-"""Project Euler, Problem 38
-
-Inefficient brute force solution. Generate all 1 to 9 pandigital numbers in
-decreasing order and check each one to see if it is the concatenated product of
-an integer and (1, 2, ..., n) for some n > 1.
-"""
-from itertools import permutations
+"""Project Euler, Problem 38"""
 
 
-def factorize(n):
-    """Return a list of factors of n.
-    """
-    factors = []
-    d = 1
-    while d**2 < n:
-        if n % d == 0:
-            factors.append(d)
-            factors.append(n // d)
-        d += 1
-
-    # Special case if n is perfect square to avoid adding the square root twice.
-    if d**2 == n:
-        factors.append(d)
-
-    return factors
-
-def is_cat_product(n):
-    """Return true if and only if n is the concatenated product of an integer
-    with (1, 2, ..., m).
-    """
-    for factor in factorize(n):
-        divisor = n // factor
-        m = divisor % 10
-
-        # m must be greater than 1.
-        if m <= 1:
-            continue
-
-        # Form concatenated product of factor and (1, 2, ..., m) and compare to
-        # n.
-        cat_product = m * factor
-        for i in range(m-1, 0, -1):
-            cat_product += i * factor * 10**len(str(cat_product))
-
-        if cat_product == n:
-            return True
-
-    return False
-
-def pandigitals():
-    """Yield all 1 to 9 pandigital numbers in decreasing order.
-    """
-    for pandigital_tuple in permutations('987654321', 9):
-        pandigital = int(''.join(pandigital_tuple))
-        yield pandigital
-
-def main():
-    """Print the largest 1 to 9 panditigal number that is the concatenated
-    product of an integer and (1, 2, ..., n) for some n > 1.
-    """
-    largest_pandigital = 0
-    for pandigital in pandigitals():
-        if is_cat_product(pandigital):
-            largest_pandigital = pandigital
-            break
-
-    print(largest_pandigital)
+def num_digits(n):
+    """Return the number of digits in base ten of the given number."""
+    count = 0
+    while n > 0:
+        n //= 10
+        count += 1
+    return count
 
 
-if __name__ == "__main__":
-    main()
+def is_pandigital(n):
+    """Return True if n is a 1 to 9 pandigital number."""
+    digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+    n_str = str(n)
+    return len(n_str) == 9 and all(digit in n_str for digit in digits)
+
+
+if __name__ == '__main__':
+    max_pandigital = 0
+
+    # The base integer cannot be larger than 9999, or else it will not produce
+    # a 9-digit number when concatenated with the products itself with 1, 2, ...
+    for base in range(1, 10000):
+        n, cat_product = 2, base
+        while num_digits(cat_product) < 9:
+            cat_product = str(cat_product) + str(base * n)
+            cat_product = int(cat_product)
+            n += 1
+        if cat_product > max_pandigital and is_pandigital(cat_product):
+            max_pandigital = cat_product
+
+    print(max_pandigital)
