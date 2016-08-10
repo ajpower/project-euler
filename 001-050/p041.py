@@ -1,47 +1,47 @@
 #!/usr/bin/env python3
-"""Project Euler, Problem 41
-
-Brute force solution which iterates over all pandigital integers in decreasing
-order. Starts with n = 7 as all pandigital integers with n = 8 or n = 9 are
-multiples of 3.
-"""
-import itertools
+"""Project Euler, Problem 41."""
+from itertools import permutations
+from sys import stderr
 
 
 def is_prime(n):
-    """Return True if and only if 'n' is prime.
-    """
-    if n == 1:
+    """Return True if the given number is prime."""
+    if n < 2:
         return False
-    d = 2
-    while d**2 <= n:
+
+    if n != 2 and n % 2 == 0:
+        return False
+
+    d = 3
+    while d * d <= n:
         if n % d == 0:
             return False
-        d += 1
+        d += 2
     return True
 
+
 def digits2num(digits):
-    """Return an integer produced by concatenating the digits in 'ditgits'.
-    """
+    """Return an integer produced by concatenating the given digits."""
     num = 0
     e = len(digits) - 1
     for d in digits:
-        num += d * 10**e
+        num += d * 10 ** e
         e -= 1
 
     return num
 
-def main():
-    for n in range(7, 0, -1):
-        digits = [d for d in range(n, 0, -1)]
-        for permutation in itertools.permutations(digits):
-            num = digits2num(permutation)
-            if is_prime(num):
-                print(num)
-                return
 
-    print("No pandigital prime found.")
+if __name__ == '__main__':
+    # There are no 8-digit or 9-digit pandigital numbers, because such numbers
+    # would be divisible by 3. Therefore we search for 7-digit pandigital
+    # primes.
 
+    digits = [d for d in range(7, 0, -1)]
+    for permutation in permutations(digits):
+        num = digits2num(permutation)
+        if is_prime(num):
+            print(num)
+            break
 
-if __name__ == "__main__":
-    main()
+    else:
+        print("No 7-digit pandigital prime found.", file=stderr)
