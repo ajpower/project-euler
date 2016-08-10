@@ -3,7 +3,7 @@
 
 A number is triangular if and only if 8*num + 1 is a perfect square.
 """
-FILENAME = "p042_words.txt"
+FILENAME = 'p042_words.txt'
 
 
 def get_words(filename):
@@ -12,8 +12,7 @@ def get_words(filename):
         text = f.read()
 
     # Split by ',', then remove surrounding quotation marks.
-    words = [field[1:-1] for field in text.split(',')]
-    return words
+    return (field[1:-1] for field in text.split(','))
 
 
 def is_perfect_square(n):
