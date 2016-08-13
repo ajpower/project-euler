@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Project Euler, Problem 51
+"""Project Euler, Problem 51.
 
 Assume that the number of repeating digits is 3. Iterate over all primes up to
 a pre-defined limit. Check if the digits 0, 1, or 2 repeat 3 times. If so,
