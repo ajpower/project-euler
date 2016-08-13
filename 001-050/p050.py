@@ -1,66 +1,58 @@
 #!/usr/bin/env python3
-"""Project Euler, Problem 50
-"""
-def is_prime(n):
-    """Return True if and only if 'n' is prime.
-    """
+"""Project Euler, Problem 50."""
+import itertools as iter
+import sys
+
+
+def prime(n):
+    """Return True if given number is prime."""
     if n <= 1:
         return False
-    d = 2
-    while d**2 <= n:
+
+    if n != 2 and n % 2 == 0:
+        return False
+
+    d = 3
+    while d * d <= n:
         if n % d == 0:
             return False
-
-        d += 1
+        d += 2
 
     return True
 
-def prime_list(n):
-    """Return a list of all primes less than or equal to 'n'.
-    """
-    sieve = [True] * (n + 1)
-    sieve[0] = False
-    sieve[1] = False
-    sieve[2] = True
 
-    i = 3
-    while i**2 <= n:
+def primes_below(n):
+    """Return a list of all primes below n."""
+    sieve = [True] * n
+    sieve[0], sieve[1] = False, False
+
+    i = 2
+    while i * i <= n:
         if sieve[i]:
-            for j in range(i+2, len(sieve), 2):
-                if sieve[j] and j % i == 0:
-                    sieve[j] = False
+            for j in range(i * i, n, i):
+                sieve[j] = False
+        i += 1
 
-        i += 2
+    return [p for p, is_prime in enumerate(sieve) if is_prime]
 
-    primes = [2] + [p for p in range(3, len(sieve), 2) if sieve[p]]
-    return primes
 
-def prime_sum(max_sum, primes):
-    """Return a list where the ith element contains the sum of the first i
-    primes. If the sum exceeds 'max_sum', it is not included.
-    """
-    prime_sum = [0]
-    for p in primes:
-        if prime_sum[-1] + p > max_sum:
+if __name__ == '__main__':
+    # The sum of the first 10^4 primes exceeds 10^6.
+    primes = primes_below(10000)
+
+    # The ith element of prime_sums contains the sum of the first i primes,
+    # provided that the sum is below 10^6.
+    prime_sums = [0]
+    for consecutive_sum in iter.accumulate(primes):
+        if consecutive_sum >= 1000000:
             break
-        prime_sum.append(prime_sum[-1] + p)
+        prime_sums.append(consecutive_sum)
+    else:
+        print('Error: insufficient number of primes computed.', file=sys.stderr)
 
-    return prime_sum
+    max_terms, max_prime = 0, 0
+    for (i, sum_i), (j, sum_j) in iter.combinations(enumerate(prime_sums), r=2):
+        if j - i > max_terms and prime(sum_j - sum_i):
+            max_terms, max_prime = j - i, sum_j - sum_i
 
-def main():
-    primes = prime_list(10**4)
-    prime_sum_table = prime_sum(10**6, primes)
-
-    max_terms = 1
-    max_prime = 0
-    for i in range(len(prime_sum_table)):
-        for j in range(len(prime_sum_table) - 1, i + max_terms, -1):
-            n = prime_sum_table[j] - prime_sum_table[i]
-            if j - i > max_terms and is_prime(n):
-                max_terms = j - 1
-                max_prime = n
-                break
     print(max_prime)
-
-if __name__ == "__main__":
-    main()
