@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
-"""Project Euler, Problem 53
-
-Brute force solution using the multiplication formula to calculate the binomial
-coefficients.
-"""
+"""Project Euler, Problem 53."""
+THRESHOLD = 1000000
 
 
 def choose(n, k):
-    """Return 'n' choose 'k'."""
-    numerator = 1
-    denominator = 1
+    """Return n choose k."""
+    numerator, denominator = 1, 1
     for i in range(1, k + 1):
         numerator *= n + 1 - i
         denominator *= i
@@ -17,16 +13,7 @@ def choose(n, k):
     return numerator // denominator
 
 
-def main():
-    threshold = 1000000
-    results = 0
-    for n in range(1, 101):
-        for k in range(0, n + 1):
-            if choose(n, k) > threshold:
-                results += 1
-
+if __name__ == '__main__':
+    results = sum(
+            choose(n, k) > THRESHOLD for n in range(101) for k in range(n))
     print(results)
-
-
-if __name__ == "__main__":
-    main()
